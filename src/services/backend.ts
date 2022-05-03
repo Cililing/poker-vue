@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { NewsResponse } from "@/services/types";
+import { NewsResponse } from "@/types/news";
 import {
   onRequest,
   onRequestDoNothing,
@@ -14,7 +14,7 @@ const client = axios.create({
 });
 
 export type Options = { headers?: Record<string, unknown>; code?: number };
-export type APIResponse<T> = [null, T, Options?] | [Error, Options?];
+export type APIResponse<T> = [T, null, Options?] | [null, Error, Options?];
 
 export class BackendService {
   constructor(private httpClient: AxiosInstance, debug: boolean) {
@@ -33,17 +33,17 @@ export class BackendService {
     }
   }
 
-  async getUser(): Promise<APIResponse<NewsResponse>> {
+  async getNews(): Promise<APIResponse<NewsResponse>> {
     try {
       const { data, headers } = await this.httpClient.get<NewsResponse>(
         "/news"
       );
-      return [null, data, { headers }];
+      return [data, null, { headers }];
     } catch (error) {
       console.error(error);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      return [error, error.response?.status];
+      return [null, error, error.response?.status];
     }
   }
 }

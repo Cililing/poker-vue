@@ -27,6 +27,7 @@ module.exports = {
       },
       rules: {
         "max-len": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
       },
     },
   ],

@@ -5,5 +5,5 @@ export interface NewsItem {
 }
 
 export interface NewsResponse {
-  news: Array<NewsItem>;
+  news: NewsItem[];
 }

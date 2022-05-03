@@ -1,23 +1,40 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <!--    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />-->
+    <p>
+      {{ news }}
+    </p>
+    <p>
+      {{ error }}
+    </p>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import HelloWorld from "@/components/HelloWorld.vue";
-import { backendService } from "@/services/backend"; // @ is an alias to /src
+import { defineComponent, onBeforeMount } from "vue";
+import { useNewsStore } from "@/store/newsStore";
+import { storeToRefs } from "pinia";
 
-@Options({
-  components: {
-    HelloWorld,
+export default defineComponent({
+  name: "HomeView",
+
+  setup() {
+    console.log("Enter: HomeView");
+
+    const newsStore = useNewsStore();
+    const { news, error } = storeToRefs(newsStore);
+
+    onBeforeMount(() => {
+      if (news.value.length == 0) {
+        newsStore.fetchNews();
+      }
+    });
+
+    return {
+      news,
+      error,
+    };
   },
-})
-export default class HomeView extends Vue {
-  created() {
-    backendService.getUser();
-  }
-}
+});
 </script>
